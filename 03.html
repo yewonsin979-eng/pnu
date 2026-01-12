@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사이버폭력 분석 대시보드</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap');
+        body { font-family: 'Pretendard', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <!-- 네비게이션 -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-blue-600">
+                <i data-lucide="shield-check" class="w-8 h-8"></i>
+                <span class="font-bold text-xl tracking-tight text-blue-900">CyberGuard</span>
+            </div>
+            <div class="hidden md:flex gap-8 text-sm font-semibold">
+                <a href="#" class="text-blue-600">홈</a>
+                <a href="#" class="text-gray-500 hover:text-blue-500">통계 분석</a>
+                <a href="#" class="text-gray-500 hover:text-blue-500">예방 가이드</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 헤더 섹션 -->
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 py-16 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
+                사이버폭력 피해 경험 분석 보고서
+            </h1>
+            <p class="text-blue-100 text-lg md:text-xl font-light opacity-90 leading-relaxed">
+                2021년부터 2024년까지의 데이터를 통해 우리 주변의 사이버폭력 실태를 확인하고 <br class="hidden md:block"/>
+                더 안전한 디지털 세상을 만들기 위한 방안을 탐색합니다.
+            </p>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="max-w-6xl mx-auto px-4 -mt-8 pb-20">
+        <!-- 요약 카드 -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 flex flex-col items-center text-center">
+                <div class="p-3 rounded-full bg-red-500 mb-4 text-white">
+                    <i data-lucide="alert-triangle"></i>
+                </div>
+                <h3 class="text-gray-500 text-sm font-medium mb-1">최고 피해율 (2022)</h3>
+                <p class="text-2xl font-bold text-gray-800">42.1%</p>
+            </div>
+            <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 flex flex-col items-center text-center">
+                <div class="p-3 rounded-full bg-blue-500 mb-4 text-white">
+                    <i data-lucide="users"></i>
+                </div>
+                <h3 class="text-gray-500 text-sm font-medium mb-1">중학생 평균 피해</h3>
+                <p class="text-2xl font-bold text-gray-800">36.6%</p>
+            </div>
+            <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 flex flex-col items-center text-center">
+                <div class="p-3 rounded-full bg-indigo-500 mb-4 text-white">
+                    <i data-lucide="book-open"></i>
+                </div>
+                <h3 class="text-gray-500 text-sm font-medium mb-1">언어폭력 비율</h3>
+                <p class="text-2xl font-bold text-gray-800">31.1%</p>
+            </div>
+            <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 flex flex-col items-center text-center">
+                <div class="p-3 rounded-full bg-emerald-500 mb-4 text-white">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <h3 class="text-gray-500 text-sm font-medium mb-1">분석 기간</h3>
+                <p class="text-2xl font-bold text-gray-800">4개년</p>
+            </div>
+        </div>
+
+        <!-- 차트 섹션 -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <!-- 그룹별 피해율 차트 -->
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-slate-800">
+                    <div class="w-1.5 h-6 bg-blue-600 rounded-full"></div>
+                    특성별 평균 피해 경험률 (%)
+                </h2>
+                <div class="h-80 relative">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 연도별 추이 차트 -->
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-slate-800">
+                    <div class="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
+                    연도별 피해 발생 추이 (%)
+                </h2>
+                <div class="h-80 relative">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 심층 분석 내용 -->
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="md:col-span-2 space-y-8">
+                <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800 font-bold">1. 분석 결과 및 시사점</h3>
+                    <div class="space-y-4 text-slate-600 leading-relaxed">
+                        <p>
+                            데이터 분석 결과, <strong>2022년은 사이버폭력이 가장 심각했던 해</strong>로 나타났습니다. 특히 남학생(42.1%)과 중학생(36.65%) 집단에서 높은 피해율이 관찰되었습니다.
+                        </p>
+                        <div class="bg-slate-50 p-4 rounded-xl border-l-4 border-blue-500">
+                            <h4 class="font-bold text-slate-800 mb-2 font-bold">💡 주목할 점: 사이버폭력의 저연령화</h4>
+                            <p>초등학생의 피해율(35.65%)이 중학생과 거의 비슷한 수준에 도달했습니다. 이는 예방 교육의 시점이 더 빨라져야 함을 의미합니다.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800 font-bold">2. 폭력 유형별 특징</h3>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-2xl bg-indigo-50 border border-indigo-100">
+                            <h4 class="font-bold text-indigo-900 mb-2 italic font-bold">#언어폭력</h4>
+                            <p class="text-sm text-indigo-800">남학생과 중학생 집단에서 가장 빈번하게 발생하며, 일상적인 대화 속에서 무분별하게 퍼지는 경향이 있습니다.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-rose-50 border border-rose-100">
+                            <h4 class="font-bold text-rose-900 mb-2 italic font-bold">#명예훼손</h4>
+                            <p class="text-sm text-rose-800">중학생 집단에서 17.1%로 최고치를 기록하며, 관계 지향적인 청소년기 특성이 반영된 것으로 보입니다.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="space-y-6">
+                <div class="bg-blue-600 p-8 rounded-3xl text-white shadow-lg shadow-blue-200">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2 font-bold">
+                        <i data-lucide="shield-check"></i>
+                        도움이 필요할 때
+                    </h3>
+                    <ul class="space-y-4 text-sm opacity-90">
+                        <li class="flex gap-2">
+                            <div class="font-bold shrink-0">117</div>
+                            <div>학교폭력 신고 및 상담 센터 (24시간)</div>
+                        </li>
+                        <li class="flex gap-2">
+                            <div class="font-bold shrink-0">1388</div>
+                            <div>청소년 상담 전화</div>
+                        </li>
+                        <li class="flex gap-2 text-xs mt-4 pt-4 border-t border-blue-400 font-light">
+                            증거를 수집(캡처)하고 선생님이나 부모님께 즉시 도움을 요청하세요. 혼자 고민하지 마세요.
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                    <h4 class="font-bold mb-3 text-slate-800 font-bold">예방 캠페인</h4>
+                    <p class="text-xs text-slate-500 mb-4 leading-relaxed">
+                        "내가 올린 글 하나가 누군가에게는 깊은 상처가 될 수 있습니다."
+                    </p>
+                    <button class="w-full py-3 bg-slate-800 text-white rounded-xl text-sm font-semibold hover:bg-slate-700 transition-colors flex items-center justify-center gap-2 font-bold">
+                        참여하기 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="bg-slate-100 py-10 px-4 border-t border-slate-200 mt-20">
+        <div class="max-w-6xl mx-auto text-center">
+            <p class="text-slate-500 text-sm">© 2026 사이버폭력 예방 분석 프로젝트. All rights reserved.</p>
+            <p class="text-slate-400 text-xs mt-2 italic">이 대시보드는 2021-2024 실태 조사 데이터를 근거로 제작되었습니다.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Lucide 아이콘 초기화
+        lucide.createIcons();
+
+        // 1. 특성별 피해 경험률 바 차트
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['여학생', '남학생', '초등학생', '중학생', '고등학생'],
+                datasets: [{
+                    label: '피해 경험률 (%)',
+                    data: [31.00, 36.28, 35.65, 36.65, 28.50],
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 8,
+                    barThickness: 30
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true, max: 50, ticks: { stepSize: 10 } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 2. 연도별 피해 추이 라인 차트
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: ['2021', '2022', '2023', '2024'],
+                datasets: [{
+                    label: '피해율 (%)',
+                    data: [32.5, 42.1, 35.8, 33.2],
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    fill: true,
+                    borderWidth: 3,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#6366f1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: false, min: 30, max: 45 },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
